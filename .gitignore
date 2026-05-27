@@ -1,0 +1,6 @@
+# Claude Code ランタイムデータは管理しない
+claude/.claude/history.jsonl
+claude/.claude/cache/
+claude/.claude/projects/
+claude/.claude/plugins/
+claude/.claude/*.log

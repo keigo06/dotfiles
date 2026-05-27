@@ -1,0 +1,41 @@
+# CLAUDE.md
+
+## Project Overview
+
+
+## Stack
+
+
+## Commands
+- dev:
+- test:
+- build:
+
+## Conventions
+
+
+## Key Files
+
+
+## Git Workflow
+- Root Branch: develop
+- ブランチ作成は `/new-branch` を使う
+- PR 前に必ず `git rebase origin/<root-branch>` を実行する
+- PR 作成時は `Language > PR Description` に応じて
+  `~/.claude/PULL_REQUEST_TEMPLATE/japanese.md` または `english.md` を
+  `--body-file` で指定する
+- PR Review: none
+- マージは **Squash and Merge** のみ
+- マージ後はブランチを削除する
+- `main` へのマージはリリース時のみ
+
+## Language
+- Code Comments: Japanese
+- Commit Messages: English
+- PR Description: Japanese
+
+## Commit Message
+Conventional Commits 形式を使う。prefix（`feat:` `fix:` など）は英語固定。詳細は `/commit` を参照。
+
+## Superpowers Overrides
+（デフォルトから変更したい場合のみ記載。不要なら削除）
