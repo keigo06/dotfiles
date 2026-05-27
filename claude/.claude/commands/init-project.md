@@ -29,17 +29,32 @@ cp ~/.claude/CLAUDE.md.template ./CLAUDE.md
    - Commit Messages: English（デフォルト）
    - PR Description: Japanese（デフォルト）
 9. **Superpowers Overrides** — TDD や git worktrees を skip したいか？
+10. **bypassPermissions** — Claude が確認なしに全操作を実行できるようにするか？
+    - `yes` → `.claude/settings.json` を生成する
+    - `no` — 生成しない（都度確認が入る）
 
 回答を受けて CLAUDE.md を更新する。
 
-## Step 2: .github/ の生成
+## Step 2: .claude/settings.json の生成（bypassPermissions が yes の場合のみ）
+
+```bash
+mkdir -p .claude
+cat > .claude/settings.json << 'EOF'
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  }
+}
+EOF
+```
+
+## Step 3: .github/ の生成
 
 プロジェクトルートに `.github/` を生成する。
 
 ```bash
 mkdir -p .github/PULL_REQUEST_TEMPLATE
 mkdir -p .github/workflows
-mkdir -p .github/ISSUE_TEMPLATE
 ```
 
 ### .github/PULL_REQUEST_TEMPLATE/
@@ -53,59 +68,6 @@ cp ~/.claude/PULL_REQUEST_TEMPLATE/japanese.md .github/PULL_REQUEST_TEMPLATE/
 # English の場合
 cp ~/.claude/PULL_REQUEST_TEMPLATE/english.md .github/PULL_REQUEST_TEMPLATE/
 ```
-
-### .github/ISSUE_TEMPLATE/
-
-`bug_report.md` と `feature_request.md` を CLAUDE.md の言語設定に合わせて生成する。
-
-**Japanese の場合:**
-
-`.github/ISSUE_TEMPLATE/bug_report.md`:
-```markdown
----
-name: バグ報告
-about: バグの報告
----
-
-## バグの内容
-
-
-## 再現手順
-1.
-2.
-3.
-
-## 期待する動作
-
-
-## 実際の動作
-
-
-## 環境
-
-```
-
-`.github/ISSUE_TEMPLATE/feature_request.md`:
-```markdown
----
-name: 機能要望
-about: 新しい機能の提案
----
-
-## 概要
-
-
-## 解決したい課題
-
-
-## 提案する解決策
-
-
-## 備考
-
-```
-
-**English の場合は英語で同内容を生成する。**
 
 ### .github/workflows/
 
@@ -131,13 +93,13 @@ jobs:
         run: echo "TODO: テストコマンドを設定"
 ```
 
-## Step 3: Superpowers のインストール
+## Step 4: Superpowers のインストール
 
 ```bash
 /plugin install superpowers@claude-plugins-official
 ```
 
-## Step 4: Git の初期設定
+## Step 5: Git の初期設定
 
 現在の git 状態を確認する:
 ```bash
@@ -147,14 +109,7 @@ git branch
 
 ### Root Branch が `develop` の場合
 
-**既存リポジトリ:**
-```bash
-git checkout -b develop 2>/dev/null || git checkout develop
-git push -u origin develop
-```
-GitHub Settings → Branches → Default branch を `develop` に変更するよう案内する。
-
-**新規リポジトリ:**
+**新規リポジトリの場合:**
 ```bash
 git init
 git add CLAUDE.md .github/
@@ -171,7 +126,7 @@ git push -u origin develop
 
 ### Root Branch が `main` の場合
 
-**新規リポジトリ:**
+**新規リポジトリの場合:**
 ```bash
 git init
 git add CLAUDE.md .github/
@@ -193,9 +148,10 @@ git push -u origin main
    - PR Review:   <値>
    - Language:    Comments=<値> / Commits=<値> / PR=<値>
 
+✅ .claude/settings.json 生成済み（bypassPermissions: <yes/no>）
+
 ✅ .github/ 生成済み
    - PULL_REQUEST_TEMPLATE/
-   - ISSUE_TEMPLATE/ (bug_report, feature_request)
    - workflows/ci.yml (要設定)
 
 ✅ Superpowers インストール済み
